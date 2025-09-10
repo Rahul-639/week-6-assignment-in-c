@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100000
+typedef struct {
+    int arr[MAX];
+    int front, rear, size;
+} Queue;
+void initQueue(Queue* q) {
+    q->front = 0;
+    q->rear = -1;
+    q->size = 0;
+}
+void enqueue(Queue* q, int x) {
+    if (q->size == MAX) return;
+    q->rear = (q->rear + 1) % MAX;
+    q->arr[q->rear] = x;
+    q->size++;
+}
+int dequeue(Queue* q) {
+    if (q->size == 0) return -1;
+    int val = q->arr[q->front];
+    q->front = (q->front + 1) % MAX;
+    q->size--;
+    return val;
+}
+void reverseK(Queue* q, int k) {
+    if (k > q->size) return;
+    int* stack = (int*)malloc(k * sizeof(int));
+    int top = -1;
+    for (int i = 0; i < k; i++) {
+        stack[++top] = dequeue(q);
+    }
+    while (top >= 0) {
+        enqueue(q, stack[top--]);
+    }
+    int rem = q->size - k;
+    for (int i = 0; i < rem; i++) {
+        enqueue(q, dequeue(q));
+    }
+
+    free(stack);
+}
+void printQueue(Queue* q) {
+    int i = q->front;
+    for (int count = 0; count < q->size; count++) {
+        printf("%d ", q->arr[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
+int main() {
+    Queue q;
+    initQueue(&q);
+    int n, k;
+    scanf("%d %d", &n, &k);
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        enqueue(&q, x);
+    }
+    reverseK(&q, k);
+    printQueue(&q);
+    return 0;
+}
