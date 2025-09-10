@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100005  
+int queue[MAX];
+int front = 0, rear = 0;  
+void push(int x) {
+    if (rear == MAX) { 
+        return;
+    }
+    queue[rear++] = x;  
+}
+int pop() {
+    if (front == rear) {  
+        return -1;
+    }
+    return queue[front++];  
+}
+int main() {
+    int q;  
+    scanf("%d", &q);
+    while (q--) {
+        int type;
+        scanf("%d", &type);
+        if (type == 1) { 
+            int x;
+            scanf("%d", &x);
+            push(x);
+        } else if (type == 2) {  
+            printf("%d ", pop());
+        }
+    }
+    return 0;
+}
