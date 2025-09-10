@@ -1,0 +1,27 @@
+#include <stdio.h>
+int canCompleteCircuit(int gas[], int cost[], int n) {
+    int total = 0;  
+    int tank = 0;   
+    int start = 0;   
+    for (int i = 0; i < n; i++) {
+        int diff = gas[i] - cost[i];
+        total += diff;
+        tank += diff;
+        if (tank < 0) {
+            start = i + 1;
+            tank = 0;
+        }
+    }
+    return (total < 0) ? -1 : start;
+}
+int main() {
+    int gas1[] = {4, 5, 7, 4};
+    int cost1[] = {6, 6, 3, 5};
+    int n1 = sizeof(gas1) / sizeof(gas1[0]);
+    printf("%d\n", canCompleteCircuit(gas1, cost1, n1)); 
+    int gas2[] = {3, 9};
+    int cost2[] = {7, 6};
+    int n2 = sizeof(gas2) / sizeof(gas2[0]);
+    printf("%d\n", canCompleteCircuit(gas2, cost2, n2)); 
+    return 0;
+}
