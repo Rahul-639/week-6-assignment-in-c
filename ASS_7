@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 500000
+typedef struct {
+    int arr[MAX];
+    int front, rear, size;
+} Queue;
+void initQueue(Queue* q) {
+    q->front = 0;
+    q->rear = -1;
+    q->size = 0;
+}
+void enqueue(Queue* q, int x) {
+    if (q->size == MAX) return;
+    q->rear = (q->rear + 1) % MAX;
+    q->arr[q->rear] = x;
+    q->size++;
+}
+int dequeue(Queue* q) {
+    if (q->size == 0) return -1;
+    int val = q->arr[q->front];
+    q->front = (q->front + 1) % MAX;
+    q->size--;
+    return val;
+}
+void interleaveQueue(Queue* q) {
+    if (q->size % 2 != 0) return; 
+    int half = q->size / 2;
+    Queue temp;
+    initQueue(&temp);
+    for (int i = 0; i < half; i++) {
+        enqueue(&temp, dequeue(q));
+    }
+    while (temp.size > 0) {
+        enqueue(q, dequeue(&temp)); 
+        enqueue(q, dequeue(q));   
+    }
+}
+void printQueue(Queue* q) {
+    int i = q->front;
+    for (int count = 0; count < q->size; count++) {
+        printf("%d ", q->arr[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
+int main() {
+    Queue q;
+    initQueue(&q);
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        enqueue(&q, x);
+    }
+    interleaveQueue(&q);
+    printQueue(&q);
+    return 0;
+}
