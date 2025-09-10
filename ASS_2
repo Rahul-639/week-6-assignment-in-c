@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node* front = NULL;
+struct Node* rear = NULL;
+void push(int x) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    temp->data = x;
+    temp->next = NULL;
+    if (rear == NULL) { 
+        front = rear = temp;
+        return;
+    }
+    rear->next = temp;  
+    rear = temp;       
+}
+int pop() {
+    if (front == NULL) {  
+        return -1;
+    }
+    struct Node* temp = front;
+    int val = temp->data;
+    front = front->next; 
+    if (front == NULL) {  
+        rear = NULL;
+    }
+    free(temp);
+    return val;
+int main() {
+    int Q;
+    scanf("%d", &Q); 
+    while (Q--) {
+        int type;
+        scanf("%d", &type);
+        if (type == 1) {  
+            int x;
+            scanf("%d", &x);
+            push(x);
+        } else if (type == 2) { 
+            printf("%d ", pop());
+        }
+    }
+    return 0;
+}
